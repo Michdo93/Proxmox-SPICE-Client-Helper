@@ -1,6 +1,9 @@
 # Proxmox-SPICE-Client-Helper
 I use the virt-manager or virt-viewer as Proxmox SPICE client. This helper downloads a current .vv file and then executes it accordingly.
 
+> [!NOTE]  
+> You may want to make several VMs executable in this way. You then have to create each VM individually and for each VM you then need a new restricted user in Proxmox and a new API token for this new user. The Python script must then also be copied and adapted several times for each VM. The same applies to the batch/shell/bash script.
+
 ## Installation
 
 ### Virt-Viewer
@@ -104,6 +107,24 @@ The spice-vdagent should start automatically after installation, but to be on th
 sudo systemctl start spice-vdagent
 sudo systemctl enable spice-vdagent
 ```
+
+## Customize the Python Script
+
+At the top of the Python script you can configure and customize the following:
+
+```
+# Set auth options (Token and Secret)
+APITOKEN = ''  # Token (Username@Realm!TokenID)
+APISECRET = ''  # Secret for the token
+
+# Set VM ID and Node
+VMID = ""
+NODE = ""
+PROXY = "" # IP or hostname
+PORT = 8006
+```
+
+In my example the `VMID` was `102` and the `NODE` was `pve`.
 
 ## Usage
 
