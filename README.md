@@ -108,7 +108,9 @@ sudo systemctl start spice-vdagent
 sudo systemctl enable spice-vdagent
 ```
 
-## Customize the Python Script
+## Customize the Proxmox SPICE Client Helper
+
+### Customize the Python Script
 
 At the top of the Python script you can configure and customize the following:
 
@@ -126,6 +128,65 @@ PORT = 8006
 
 In my example the `VMID` was `102` and the `NODE` was `pve`.
 
+### Customize the Batch Script (Windows)
+
+The Batch script looks like this:
+
+```
+@echo off
+REM Setze den Pfad zu Python und dem Skript im Home-Verzeichnis des aktuellen Benutzers
+set PYTHON_PATH=C:\Python312\python.exe
+set SCRIPT_PATH=%USERPROFILE%\Proxmox-SPICE-Client-Helper\virt_viewer.py  REM Home-Verzeichnis des aktuellen Benutzers
+
+REM Führe das Python-Skript aus
+"%PYTHON_PATH%" "%SCRIPT_PATH%"
+
+REM Warte auf eine Eingabe, bevor das Fenster geschlossen wird
+pause
+```
+
+* Maybe you have installed Python to another location
+* Maybe you have installed Python in another version.
+* Maybe you use multiple VMs which means you need multiple Python and Batch scripts.
+
+### Customize the Bash Script (Linux)
+
+```
+#!/bin/bash
+# Setze den Pfad zu Python und dem Skript im Home-Verzeichnis des aktuellen Benutzers
+PYTHON_PATH="/usr/bin/python3"  # Pfad zu Python
+SCRIPT_PATH="$HOME/Proxmox-SPICE-Client-Helper/virt_viewer.py"  # Home-Verzeichnis des aktuellen Benutzers
+
+# Führe das Python-Skript aus
+"$PYTHON_PATH" "$SCRIPT_PATH"
+
+# Warte auf eine Eingabe (optional)
+read -p "Press any key to continue..."
+```
+
+* Maybe you have installed Python to another location
+* Maybe you have installed Python in another version.
+* Maybe you use multiple VMs which means you need multiple Python and BASH scripts.
+
+### Customize the Shell Script (Linux)
+
+```
+#!/bin/sh
+# Setze den Pfad zu Python und dem Skript im Home-Verzeichnis des aktuellen Benutzers
+PYTHON_PATH="/usr/bin/python3"  # Pfad zu Python
+SCRIPT_PATH="$HOME/Proxmox-SPICE-Client-Helper/virt_viewer.py"  # Home-Verzeichnis des aktuellen Benutzers
+
+# Führe das Python-Skript aus
+"$PYTHON_PATH" "$SCRIPT_PATH"
+
+# Warte auf eine Eingabe (optional)
+read -p "Press any key to continue..."
+```
+
+* Maybe you have installed Python to another location
+* Maybe you have installed Python in another version.
+* Maybe you use multiple VMs which means you need multiple Python and Shell scripts.
+
 ## Usage
 
 As example it will look like this:
@@ -134,7 +195,64 @@ As example it will look like this:
 
 ### Windows
 
+On Windows you have to double click on your batch file.
+
+Alternatively, change to the directory of the script in Powershell or in CMD and execute it as follows, for example:
+
+```
+.\virt_viewer.bat
+```
 
 ### Linux
 
+On Linux you can use BASH or Shell.
 
+#### BASH
+
+At first you have to make it executable. This looks for example like this:
+
+```
+chmod +x virt_viewer.bash
+```
+
+Then you can run it as example in your terminal with:
+
+```
+./virt_viewer.bash
+```
+
+or:
+
+```
+bash virt_viewer.bash
+```
+
+Change GNOME setting for double-click action: You can change these settings to automatically run a script in the terminal:
+
+* Open the file manager (Nautilus) and go to Settings (gear icon top right).
+* Select the Behavior tab.
+* Under “Executable text files” you can select
+* Execute (to run it immediately) or
+* Ask (to decide whether you want to run or open it).
+
+#### Shell
+
+At first you have to make it executable. This looks for example like this:
+
+```
+chmod +x virt_viewer.sh
+```
+
+Then you can run it as example in your terminal with:
+
+```
+./virt_viewer.sh
+```
+
+Change GNOME setting for double-click action: You can change these settings to automatically run a script in the terminal:
+
+* Open the file manager (Nautilus) and go to Settings (gear icon top right).
+* Select the Behavior tab.
+* Under “Executable text files” you can select
+* Execute (to run it immediately) or
+* Ask (to decide whether you want to run or open it).
