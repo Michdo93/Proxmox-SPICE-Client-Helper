@@ -51,12 +51,18 @@ try:
             f"host-subject={response_data.get('host-subject', '')}\n"
         )
 
-        # Save the SPICE proxy data to a .vv file in the user's home directory
-        home_dir = os.path.expanduser("~")  # Get the user's home directory
-        vv_file_path = os.path.join(home_dir, "spiceproxy.vv")
+    # Save the SPICE proxy data to a .vv file in the Proxmox-SPICE-Client-Helper directory
+    home_dir = os.path.expanduser("~")  # Get the user's home directory
+    helper_dir = os.path.join(home_dir, "Proxmox-SPICE-Client-Helper")  # Directory inside the user's home
 
-        with open(vv_file_path, "w") as file:
-            file.write(vv_content)
+    # Ensure the directory exists
+    if not os.path.exists(helper_dir):
+        os.makedirs(helper_dir)
+
+    vv_file_path = os.path.join(helper_dir, "spiceproxy.vv")
+
+    with open(vv_file_path, "w") as file:
+        file.write(vv_content)
 
         print("SPICE proxy file downloaded successfully.")
         print(f"Opening file: {vv_file_path}")
