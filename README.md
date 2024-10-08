@@ -43,14 +43,40 @@ git clone https://github.com/Michdo93/Proxmox-SPICE-Client-Helper
 
 ## Proxmox Configuration
 
+### Datacenter
+
+You want two things: on the one hand, a restricted user who can only operate the VM and, on the other, that he does not connect to the web interface if possible. In other words, they should not be able to log in using a password. It is therefore advisable to use the API token. The script can only be used to obtain access data for the REST API, but not to log in to the web interface. He does not know the correct login data. This also means that they cannot change the account password and you can continue to administer this account.
+
+#### Users
+
+First you have to create a new user. To do this, first click on `Datacenter`, then on `Permissions` and then on `Users`. By clicking on the `Add` button you can create your new user. Inside `User name` you can choose the name of your user. In my example I used `limiteduser`. Then you have to select `Proxmox VE authentication server` as `Realm`. This is needes because the user should be limited to only control the VM and he needs an access via the REST API. You can fill in the remaining fields as you wish or leave them blank.
+
+#### API Tokens
+
+In the next step, click on `Datacenter`, then also on `Permissions` and then on `API Tokens`. Then click on the `Add` button. As `User` you have to choose your user. In my case I used `limiteduser@pve`. Please notice that you have to choose `<user_name>@<realm>`. You can then assign a name for the `Token ID`. If you want, you can specify under 'Expire' when this token expires. I have simply selected `Never`. If you now click on `Add`, a `Secret` will appear in the next step, which you should copy and keep safe. Maybe just use a password manager like KeePass to store the secret of the token. You may also need several user accounts, so it doesn't hurt to keep them somewhere safe.
+
+
+
+#### Roles
+
+In the next step, click on `Datacenter`, then also on `Permissions` and then on `Roles`. After that you click on `Create`. For `Name` I choosed `VMViewer` but you can name it like you want. I found the name to be the most obvious and self-explanatory. On `Privileges` you select `VM.Audit`, `VM.Console` and `VM.PowerMgmt`. After adding the role it looks like this:
+
+
 ### VM
 
-### User Role
+#### Hardware
 
-### Token + Secret
+At first you have to select your VM and go to `Hardware`. Make sure that `Display` is set to `SPICE`. I left the `BIOS` on the `Default (SeaBIOS)` setting, also Machine with `Default (i440fx)`. In my configuration the `SCSI Controller` is set to `VirtIO SCSI single`. I think you can customize your VM to your desire. Then I clicked on the `Add` button and choose `USB device`. There you have to select `Spice Port`. Maybe you will create two or three USB devices. Then I added an `Audi Device` by also clicking at first on the `Add` button and selected then `Audio device`. As `Audio Device` I selected `ich9-intel-hda` and as `Backend Driver` I selected `SPICE`. Maybe you have to choose a similar configuration.
 
+#### Options
 
-## VM Configuration
+In the next step you will click on `Options`. Make sure that `Start at boot` is activated, because later you will not login to Proxmox and start the VM manually if the server will reboot.
+
+#### Permissions
+
+In the last step you will click on the `Permissions` tab. Then you click `Add` and choose `API Token Permission`. In the next step you will select your `API token` (in my examle `limiteduser@pve!limiteduser-token`) on `API Token` and inside `Role` you choose `VMViewer`. After that you click on `Add`. At the end this looks like this.
+
+## VM Configuration (inside the VM)
 
 As example inside a linux VM you have to install:
 
